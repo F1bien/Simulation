@@ -5,15 +5,18 @@ public class Particle {
 	private int y;
 	private int age;
 	private boolean diet;
+	private double energy;
+
 	
 	
 	//-------Costructor-------//
 	
-	public Particle( boolean input ) {
-		this.diet = input;
+	public Particle( boolean diet ) {
+		this.diet = diet;
 		this.age = 0;
 		this.x = 0;
 		this.y = 0;
+		this.energy = 100;
 	}
 	
 	//--------get&set-------//
@@ -26,6 +29,12 @@ public class Particle {
 	}
 	public int get_x() {
 		return x;
+	}
+	public boolean get_diet() {
+		return diet;
+	}
+	public double get_energy() {
+		return energy;
 	}
 
 
@@ -60,5 +69,6 @@ public class Particle {
 		this.y += ((Math.random()*(max-min))+min);
 	}
 	
+	/* quando una particella raggiunge tot cibo crea una nuova copia  */
 	
 }

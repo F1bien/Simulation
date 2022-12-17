@@ -35,28 +35,20 @@ public class World {
 	
 
 	//--------method-------//
-	
-	
-
-
-
-	
-	/*	
+		
 	public void populate(int num) {
 		int i;
 		double random = Math.random()*50;
-		
-		for( i = 0  ; i < random ; i++ ) {
-			double random2 = Math.random()*2;
-			
-			if (random2 == 1 )
-				this.list_particle.add(new Herdivorous());
-			if (random2 == 2 )
-				this.list_particle.add(new Carnivorous());
+		double random2 = Math.random() * 2;
+
+		for( i = 0  ; i < random ; i++ ) {		
+			if ( random2 == 1 )
+				this.list_particle.add(new Particle(true));
+			if ( random2 == 2 )
+				this.list_particle.add(new Particle(false));
 		}
 	}
 	
-	 *  1) metodo life
-		1) metodo reproduction
-	*/
+	
+
 }
