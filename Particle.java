@@ -1,31 +1,32 @@
 
 public class Particella extends Thread {
 
-	private int x, y;
 	
+	// 	world properties
+	private int length;
+	private int width;
+	
+	
+	// 	particle state
+	private int x, y;
 	private int age;
 	private boolean die;
+	//private double energy;
+	
+	
+	// 	particle properties 
 	private int die_age;
-	private boolean diet;
-	private double energy;
-	private int Min = 50;
-	private int Max = 100;
+	//private boolean diet;
+	private int Min = 10;
+	private int Max = 15;
 
-	public void run () {
-		
-		while ( ageCheck() == true ) {
-			System.out.println("X: " + WhereX() + "  Y: " +WhereY() + " age: " + getAge());
-			
-			update();
-			
-		}
-		die = true;
-		
-	}
+
 	
 	
-	public Particella () {
-		RandomPos(0, 1000);
+	public Particella ( int length, int width ) {
+		this.length = length;
+		this.width = width;
+		RandomPos();
 		this.age = 0;
 		this.die = false;
 		this.die_age = Min + (int)(Math.random() * ((Max - Min) + 1));
@@ -34,7 +35,10 @@ public class Particella extends Thread {
 	}
 
 	
-	public Particella ( int x, int y ) {
+	public Particella ( int length, int width,
+						int x, int y ) {
+		this.length = length;
+		this.width = width;
 		this.x = x;
 		this.y = y;
 		this.age = 0;
@@ -45,8 +49,28 @@ public class Particella extends Thread {
 	}
 	
 	
-	//--------method-------//
+	// -------- LIVE --------
 
+	public void run () {
+		
+		while ( ageCheck() == true ) {
+			System.out.println("X: " + WhereX() + "  Y: " + WhereY() + " age: " + getAge());
+			
+			update();
+			
+			try {
+				sleep(100);
+			}
+			catch ( InterruptedException e ) {
+				break;
+			}
+			
+		}
+		die = true;
+		System.out.println("Tread Arrestato");
+		
+	}
+	
 	public void update() {
 
 		Grow();
@@ -56,17 +80,17 @@ public class Particella extends Thread {
 		// Draw();
 
 		
-		if( this.x > 1000 ) {
-			this.x = this.x - 1000;
+		if( this.x > length ) {
+			this.x = this.x - (length*2);
 		}
-		if (this.x < 0) {
-			this.x = this.x + 1000;
+		if (this.x < - length) {
+			this.x = this.x + (length*2);
 		}
-		if( this.y > 1000 ) {
-			this.y = this.y - 1000;
+		if( this.y > width ) {
+			this.y = this.y - (width*2);
 		}
-		if (this.y < 0) {
-			this.y = this.y + 1000;
+		if (this.y < - width) {
+			this.y = this.y + (width*2);
 		}
 
 	}
@@ -93,30 +117,19 @@ public class Particella extends Thread {
 		}
 
 	}
-
-	/*
-	public boolean SetX ( int x ) {
-		if ( x >= 0 && x < 1920 ) {
-			this.x = x;
-			return true;
-		}
-		return false;
-	}
-
-	public boolean SetY ( int y ) {
-		if ( y >= 0 && y < 1080 ) {
-			this.y = y;
-			return true;
-		}
-		return false;
-	}
 	
-	public void Reset ( int x, int y ) {
-		this.x = x;
-		this.y = y;
+	
+	// -------- SET-UP --------
+	
+	private void RandomPos () {
+		this.x = - length + (int)(Math.random() * ((length - - length) + 1));
+		this.y = - width + (int)(Math.random() * ((width - - width) + 1));
+		
 	}
-	*/
 
+
+	
+	// -------- GET --------
 	public int WhereX () {
 		return x;
 	}
@@ -130,12 +143,7 @@ public class Particella extends Thread {
 	}
 
 
-	private void RandomPos ( int Min, int Max ) {
-		if ( Max > Min ) {
-			this.x = Min + (int)(Math.random() * ((Max - Min) + 1));
-			this.y = Min + (int)(Math.random() * ((Max - Min) + 1));
-		}
-	}
+
 
 	/*
 	private boolean Collision ( Particella P ) {
@@ -152,8 +160,12 @@ public class Particella extends Thread {
 
 	}
 	
+	
+	// -------- CHECK --------
+	
 	private boolean ageCheck () {
 		return age < die_age ;
+		
 	}
 	
 	public boolean dieCheck () {
