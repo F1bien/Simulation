@@ -1,54 +1,65 @@
-import java.util.ArrayList;
+import java.util.*;
 
 public class World {
 	
-	public int length;
-	public int width;
-	public int num_particle;
-	public ArrayList<Particle> list_particle;
+	private static ArrayList<Particella> particleList = new ArrayList<Particella>();
+	private static ArrayList<Particella> deadParticleList = new ArrayList<Particella>();
 	
-
-	//-------Costructor-------//
+	private int length;
+	private int width;
+	
+	public World ( int x, int y,
+				   int particle_n ) {
 		
-	public World(int length, int width, int num_particle){
-		this.length = length; 
-		this.width = width;
-		this.num_particle = num_particle;
-
-		// TO-DO generate particle
-
-	}
-	
-
-	//--------get&set-------//
-	
-	public int get_length() {
-		return length;
-	}
-	public int get_width() {
-		return width;
-	}
-	public int get_num_particle() {
-		return num_particle;
-	}
-	
-	
-
-	//--------method-------//
+		this.length = x;
+		this.width = y;
 		
-	public void populate(int num) {
-		int i;
-		double random = Math.random()*50;
-		double random2 = Math.random() * 2;
-
-		for( i = 0  ; i < random ; i++ ) {		
-			if ( random2 == 1 )
-				this.list_particle.add(new Particle(true));
-			if ( random2 == 2 )
-				this.list_particle.add(new Particle(false));
+		
+		// -------- SET-UP --------
+		generateParticle(particle_n);
+		
+		
+		
+		// -------- EVOLUTION --------
+		while ( true ) {
+			for (int i = 0 ; i < particleList.size() ; i += 1) {
+				
+				if (particleList.get(i).dieCheck() == true ) {
+					//particleList.get(i).interrupt();
+					deadParticleList.add(particleList.get(i));
+					particleList.remove(i);
+				}
+			}
+			
+			if ( particleList.size() == 0 ) {
+				break;
+			}
 		}
+		
+		for (int i = 0 ; i < 10 ; i += 1) {
+			try {
+				deadParticleList.get(i).join();
+			}
+			catch (InterruptedException e) {
+				System.out.println("\nTread non joinato");
+			}
+		}
+		
+		System.out.println("\n"+"------------------------------"+
+								"\nTutte le particelle sono morte");
+		
+
+	}
+	
+	private void generateParticle ( int n ) {
+		for (int i = 0 ; i < n ; i += 1) {
+			particleList.add(new Particella(length, width));
+			//particleList.get(i).start();
+		}
+		
+		
 	}
 	
 	
-
 }
+
